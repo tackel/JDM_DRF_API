@@ -13,6 +13,7 @@ class ProductSerializer(serializers.ModelSerializer):
         # para retornar si se toma el to_representation, pero para crear se toma lo que tengas en el field de la clase Meta. Puede que no coincidan.
         return {
             'id': instance.id,
+            'codigo': instance.codigo,
             'nombre': instance.nombre,
             'costo': instance.costo,
             'precio': instance.precio         

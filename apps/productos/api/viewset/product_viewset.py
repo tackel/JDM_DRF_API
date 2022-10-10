@@ -37,7 +37,7 @@ class ProductViewSet(viewsets.ModelViewSet):
 
     @action(methods=['get'], detail=False)
     def product_update(self, request):
-        productos = Product.objects.filter(actualizar=True).order_by('id')
+        productos = Product.objects.filter(actualizar=True, state=True).order_by('id')
         if productos:
             productos = ProductSerializer(productos, many=True).data
             return Response(productos, status=status.HTTP_200_OK)

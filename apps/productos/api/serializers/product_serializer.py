@@ -17,7 +17,8 @@ class ProductSerializer(serializers.ModelSerializer):
             'codigo': instance.codigo,
             'nombre': instance.nombre,
             'costo': instance.costo,
-            'precio': instance.precio         
+            'precio': instance.precio,
+            'actualizar': instance.actualizar       
         }
 
 class ProductRetrieveSerializer(serializers.ModelSerializer):

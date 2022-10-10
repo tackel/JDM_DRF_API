@@ -1,6 +1,12 @@
+from django.db.models import Q
+
 from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.decorators import action
+
+from apps.productos.models import Product
+
 
 from apps.productos.api.serializers.product_serializer import ProductSerializer, ProductRetrieveSerializer
 
@@ -16,6 +22,26 @@ class ProductViewSet(viewsets.ModelViewSet):
         if pk is None:
             return self.get_serializer().Meta.model.objects.filter(state=False)
         return self.get_serializer().Meta.model.objects.filter(id=pk, state=False).first()         
+
+    @action(methods=['get'], detail=False)
+    def search_product(self, request):
+        get_name_or_codigo = request.query_params.get('get_name_or_codigo', '')
+        producto = Product.objects.filter(
+            Q(nombre__iexact=get_name_or_codigo) |
+            Q(codigo__iexact=get_name_or_codigo)
+            ).first()
+        if producto:
+            producto_serializer = ProductSerializer(producto)
+            return Response(producto_serializer.data, status=status.HTTP_200_OK)
+        return Response({'message':'No se encontro el producto'}, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(methods=['get'], detail=False)
+    def product_update(self, request):
+        productos = Product.objects.filter(actualizar=True).order_by('id')
+        if productos:
+            productos = ProductSerializer(productos, many=True).data
+            return Response(productos, status=status.HTTP_200_OK)
+        return Response({'message':'No se encontraron productos para actualizar'}, status=status.HTTP_400_BAD_REQUEST)
 
     def list(self, request):
         product_serializer = self.get_serializer(self.get_queryset(), many=True)

@@ -12,6 +12,7 @@ class Product(models.Model):
     nombre = models.CharField('Nombre de Producto', max_length=150, blank=False, null=False)
     costo = models.FloatField('Costo de compra')
     precio = models.FloatField('Precio de venta')
+    actualizar = models.BooleanField('Actualizar producto', default=True)
     #description = models.TextField('Descripción de Producto', blank=False, null=False)
     #category_product = models.ForeignKey(CategoryProduct, on_delete=models.CASCADE, verbose_name='Categoria de Producto', null=True)
     created_date = models.DateField('Fecha de Creación', auto_now=False, auto_now_add=True)
